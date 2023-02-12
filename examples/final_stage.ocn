@@ -1,0 +1,7 @@
+import "io.wvh"
+
+std::entrypoint main(int argc, char** argv) {
+	std::io::print("Hello, World!");
+
+	return 0;
+}

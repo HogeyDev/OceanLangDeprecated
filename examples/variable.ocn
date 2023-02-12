@@ -1,0 +1,10 @@
+import "examples/io.wv"
+import "examples/string.wv"
+
+int main() {
+	str a = "Hello, World";
+
+	print(a);
+
+	return 0;
+}

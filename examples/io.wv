@@ -1,0 +1,19 @@
+extern asm = "
+	print:
+	push ebp
+	mov ebp, esp
+
+	mov eax, [esp+8]
+	push eax
+	call strlen
+	add esp, 4
+
+	mov eax, 4
+	mov ebx, 1
+	mov ecx, [esp+8]
+	int 0x80
+
+	mov esp, ebp
+	pop ebp
+	ret
+";

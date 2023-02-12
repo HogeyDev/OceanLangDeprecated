@@ -1,0 +1,7 @@
+import "examples/io.wv"
+
+int main() {
+	print("Hello, Recursion!");
+
+	return 0;
+}
