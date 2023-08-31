@@ -1,0 +1,6 @@
+extern asm = "
+exit:
+    mov rax, 60
+    pop rsi
+    syscall
+";

@@ -1,0 +1,10 @@
+import "example/io.wv" // imports standard io
+
+void main() {
+    str myString = "Hello, World!";
+    // int myInt = 69;
+    // printInt(myInt);
+    print(myString);
+
+    exit(0);
+}
