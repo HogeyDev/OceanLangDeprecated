@@ -1,8 +1,0 @@
-import "examples/io.wv"
-import "examples/string.wv"
-
-int main() {
-	print("Hello, World!");
-
-	return 0;
-}
