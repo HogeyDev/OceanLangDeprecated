@@ -1,4 +1,5 @@
 import "example/io.wv" // imports standard io
+import "example/stdlib.wv"
 
 void main() {
     str myString = "Hello, World!";

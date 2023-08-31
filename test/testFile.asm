@@ -37,6 +37,13 @@ print:
     ret
 
 
+
+exit:
+    mov rax, 60
+    pop rsi
+    syscall
+
+
 global main
 main:
 sub rsp, 8
@@ -45,6 +52,9 @@ mov QWORD [rsp+8], STR0
 push QWORD [rsp+8]
 
 call print
+add rsp, 8
+push 0
+call exit
 add rsp, 8
 
 mov rax, 60
