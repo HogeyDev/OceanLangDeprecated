@@ -89,12 +89,13 @@ public:
       std::string pushed;
       if (a->type == AST_VARIABLE) {
         int offset = scope->getVariableOffset(a->value);
-        std::string offsetString =
-            "QWORD [rsp+" + std::to_string(offset) + "]\n";
-        pushed = offsetString;
-      }
-      if (a->declType == "str") {
+        pushed = "QWORD [rsp+" + std::to_string(offset) + "]";
+      } else if (a->declType == "str") {
         pushed = this->addNewString(a->value);
+      } else {
+        // std::cout << "HELP" << std::endl;
+        printAST(a);
+        pushed = "QWORD [rsp+8]";
       }
       ret += "push " + pushed + "\n";
     }

@@ -6,3 +6,6 @@ compile:
 
 run:
 	./testFile
+
+debug:
+	gdb ./testFile

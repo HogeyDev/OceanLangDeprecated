@@ -52,7 +52,6 @@ class Lexer {
                 return this->parseId();
             }
             if (isdigit(this->c)) {
-                std::cout << this->c << std::endl;
                 return this->parseInt();
             }
 

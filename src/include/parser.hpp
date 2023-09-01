@@ -198,7 +198,6 @@ public:
       ret->value = this->currentToken->value;
       this->eat(TOKEN_ID);
     } else if (this->currentToken->type == TOKEN_INT) {
-      std::cout << "YASSSS!" << std::endl;
       ret->body = this->parseExpression();
     }
 
@@ -219,7 +218,7 @@ public:
       op_T operation = this->parseOperation();
       ret->left = left;
       ret->binOp = operation;
-    } else {
+    } else if (left->type == AST_EXPRESSION_PRIMARY) {
       ret = left;
     }
 
