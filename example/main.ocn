@@ -1,5 +1,5 @@
 import "example/io.wv" // imports standard io
-import "example/stdlib.wv"
+import "example/stdlib.wv" // imports exiting
 
 void main() {
     str myString = "Hello, World!";
@@ -7,5 +7,5 @@ void main() {
     // printInt(myInt);
     print(myString);
 
-    exit(10);
+    exit(myInt);
 }

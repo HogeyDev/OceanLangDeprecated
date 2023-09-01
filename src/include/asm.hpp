@@ -66,6 +66,13 @@ public:
       ret += "sub rsp, 8\n";
       ret += "mov QWORD [rsp+8], " + pushed + "\n";
       scope->addNewVariable(ast->declType, ast->declarator->value, pushed);
+    } else if (ast->declType == "int") {
+      ret += "sub rsp, 8\n";
+      ret += "mov QWORD [rsp+8], " + ast->declarator->value + "\n";
+      std::cout << "NAME: " << ast->declarator->value
+                << " VALUE: " << ast->value << std::endl;
+      scope->addNewVariable(ast->declType, ast->value,
+                            std::stoi(ast->declarator->value));
     }
     return ret;
   }

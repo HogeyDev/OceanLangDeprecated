@@ -2,7 +2,7 @@ CC := g++
 CCARGS := -Wall -Werror -Wpedantic -g
 
 .PHONY: clean
-all: clean compile run testCode
+all: clean compile run test
 
 compile:
 	$(CC) src/*.cpp -o build/main -I./src/include $(CCARGS)

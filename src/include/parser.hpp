@@ -150,6 +150,7 @@ public:
       } else if (ret->declType == "int") {
         // parse expression
         ret->declarator = this->parseExpression();
+        this->eat(TOKEN_SEMICOLON);
       }
     }
 
