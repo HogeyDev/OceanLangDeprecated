@@ -71,8 +71,7 @@ public:
       ret += "mov QWORD [rsp+8], " + ast->declarator->value + "\n";
       std::cout << "NAME: " << ast->declarator->value
                 << " VALUE: " << ast->value << std::endl;
-      scope->addNewVariable(ast->declType, ast->value,
-                            std::stoi(ast->declarator->value));
+      scope->addNewVariable(ast->declType, ast->declarator->value, ast->value);
     }
     return ret;
   }
@@ -83,6 +82,8 @@ public:
     if (ast->declarator->value != "main")
       ret += "push rbp\nmov rbp, rsp\n";
     ret += this->compileRootCompound(ast->declarator->body) + "\n";
+    ret += "call " + ast->value + "\nadd rsp, " +
+           std::to_string(scope->variableListLength() * 8);
     if (ast->declarator->value == "main") {
       ret += "mov rax, 60\nmov rdi, 0\nsyscall\n";
     } else {
@@ -108,8 +109,6 @@ public:
       }
       ret += "push " + pushed + "\n";
     }
-    ret += "call " + ast->value + "\nadd rsp, " +
-           std::to_string(ast->arguments.size() * 8);
     return ret;
   }
   std::string compileExtern(AST *ast, Scope *scope) {

@@ -31,4 +31,7 @@ public:
               << std::endl;
     exit(1);
   }
+  int variableListLength() {
+    return (this->strings.size() + this->ints.size());
+  }
 };

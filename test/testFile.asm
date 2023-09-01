@@ -50,14 +50,16 @@ main:
 sub rsp, 8
 mov QWORD [rsp+8], STR0
 
-push QWORD [rsp+8]
-call print
-add rsp, 8
-mov QWORD [rsp+8], 10
-push QWORD [rsp+8]
-call exit
-add rsp, 8
+sub rsp, 8
+mov QWORD [rsp+8], myInt
 
+push QWORD [rsp+16]
+
+push QWORD [rsp+8]
+
+
+call 
+add rsp, 0
 mov rax, 60
 mov rdi, 0
 syscall
@@ -65,3 +67,4 @@ syscall
 
 section .data
 STR0: db "Hello, World!", 0xa, 0
+myInt: db 69

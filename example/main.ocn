@@ -3,9 +3,10 @@ import "example/stdlib.wv" // imports exiting
 
 void main() {
     str myString = "Hello, World!";
-    // int myInt = 69;
+    int myInt = 69;
     // printInt(myInt);
     print(myString);
 
+    // exit(10);
     exit(myInt);
 }
