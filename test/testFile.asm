@@ -40,7 +40,8 @@ print:
 
 exit:
     mov rax, 60
-    pop rsi
+    mov rdi, QWORD [rsp+8]
+    add rsp, 8
     syscall
 
 
@@ -52,6 +53,7 @@ mov QWORD [rsp+8], STR0
 push QWORD [rsp+8]
 call print
 add rsp, 8
+mov QWORD [rsp+8], 10
 push QWORD [rsp+8]
 call exit
 add rsp, 8

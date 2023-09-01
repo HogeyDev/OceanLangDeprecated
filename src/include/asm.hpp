@@ -92,10 +92,12 @@ public:
         pushed = "QWORD [rsp+" + std::to_string(offset) + "]";
       } else if (a->declType == "str") {
         pushed = this->addNewString(a->value);
-      } else {
+      } else if (a->type == AST_EXPRESSION) {
         // std::cout << "HELP" << std::endl;
-        printAST(a);
-        pushed = "QWORD [rsp+8]";
+        if (a->body->type == AST_EXPRESSION_PRIMARY) {
+          ret += "mov QWORD [rsp+8], " + a->body->value + "\n";
+          pushed = "QWORD [rsp+8]";
+        }
       }
       ret += "push " + pushed + "\n";
     }

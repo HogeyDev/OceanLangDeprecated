@@ -1,6 +1,7 @@
 extern asm = "
 exit:
     mov rax, 60
-    pop rsi
+    mov rdi, QWORD [rsp+8]
+    add rsp, 8
     syscall
 ";

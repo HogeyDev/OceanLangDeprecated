@@ -199,6 +199,7 @@ public:
       this->eat(TOKEN_ID);
     } else if (this->currentToken->type == TOKEN_INT) {
       ret->body = this->parseExpression();
+      ret->type = AST_EXPRESSION;
     }
 
     return ret;
