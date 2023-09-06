@@ -82,8 +82,6 @@ public:
     if (ast->declarator->value != "main")
       ret += "push rbp\nmov rbp, rsp\n";
     ret += this->compileRootCompound(ast->declarator->body) + "\n";
-    ret += "call " + ast->value + "\nadd rsp, " +
-           std::to_string(scope->variableListLength() * 8);
     if (ast->declarator->value == "main") {
       ret += "mov rax, 60\nmov rdi, 0\nsyscall\n";
     } else {
@@ -109,6 +107,8 @@ public:
       }
       ret += "push " + pushed + "\n";
     }
+    ret += "call " + ast->value + "\nadd rsp, 8";
+    // + std::to_string(scope->variableListLength() * 8) + "\n";
     return ret;
   }
   std::string compileExtern(AST *ast, Scope *scope) {

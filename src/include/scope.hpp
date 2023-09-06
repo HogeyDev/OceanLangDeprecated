@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -18,14 +20,14 @@ public:
         std::vector<std::string>{type, name, std::to_string(value)});
   }
   int getVariableOffset(std::string variableName) {
-    int totLen = strings.size() + ints.size();
+    int totLen = this->variableListLength();
     for (unsigned int i = 0; i < this->strings.size(); i++) {
       if (this->strings[i][1] == variableName)
         return (totLen - i) * 8;
     }
     for (unsigned int i = 0; i < this->ints.size(); i++) {
       if (this->ints[i][1] == variableName)
-        return (totLen - i) * 8;
+        return ((totLen - this->strings.size()) - i) * 8;
     }
     std::cout << "[SCOPE]: No Variable Called '" << variableName << "'"
               << std::endl;

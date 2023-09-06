@@ -1,6 +1,7 @@
 #pragma once
 #include "ast.hpp"
 #include "lexer.hpp"
+#include "scope.hpp"
 #include "token.hpp"
 #include "util.hpp"
 #include <iostream>
@@ -41,17 +42,17 @@ public:
     this->currentToken = this->lexer->nextToken();
     return this->currentToken;
   }
-  AST *parse(token_T closer = TOKEN_EOF) {
+  AST *parse(Scope *scope = new Scope(), token_T closer = TOKEN_EOF) {
     AST *root = new AST(AST_ROOT);
 
     while (this->currentToken->type != closer) {
       // printToken(this->currentToken);
       switch (this->currentToken->type) {
       case TOKEN_ID:
-        root->children.push_back(this->parseId());
+        root->children.push_back(this->parseId(scope));
         break;
       case TOKEN_PRIM_TYPE:
-        root->children.push_back(this->parsePrimType());
+        root->children.push_back(this->parsePrimType(scope));
         break;
       default:
         this->printError();
@@ -61,7 +62,7 @@ public:
 
     return root;
   }
-  AST *parseId() {
+  AST *parseId(Scope *scope) {
     AST *ret = new AST(AST_NULL);
 
     if (this->currentToken->value == "import") {
@@ -90,7 +91,7 @@ public:
         // function call
         ret->type = AST_FUNCTION_CALL;
         this->eat(TOKEN_LPAREN);
-        ret->arguments = this->parseArguments();
+        ret->arguments = this->parseArguments(scope);
         this->eat(TOKEN_RPAREN);
         this->eat(TOKEN_SEMICOLON);
       } else if (this->currentToken->type == TOKEN_EQUALS) {
@@ -104,7 +105,7 @@ public:
 
     return ret;
   }
-  AST *parsePrimType() {
+  AST *parsePrimType(Scope *scope) {
     AST *ret = new AST(AST_DECLARATION);
 
     ret->declType = this->currentToken->value;
@@ -117,11 +118,11 @@ public:
       // function declaration
       ret->declarator->type = AST_FUNCTION_DECLARATION;
       this->eat(TOKEN_LPAREN);
-      ret->declarator->arguments = this->parseParameters();
+      ret->declarator->arguments = this->parseParameters(scope);
       this->eat(TOKEN_RPAREN);
 
       this->eat(TOKEN_LBRACE);
-      ret->declarator->body = this->parseCompound();
+      ret->declarator->body = this->parseCompound(scope);
       this->eat(TOKEN_RBRACE);
     } else {
       // variable initialization
@@ -149,14 +150,14 @@ public:
 
       } else if (ret->declType == "int") {
         // parse expression
-        ret->body = this->parseExpression();
+        ret->body = this->parseExpression(scope);
         this->eat(TOKEN_SEMICOLON);
       }
     }
 
     return ret;
   }
-  std::vector<AST *> parseParameters() {
+  std::vector<AST *> parseParameters(Scope *scope) {
     std::vector<AST *> ret;
 
     while (this->currentToken->type != TOKEN_RPAREN) {
@@ -172,14 +173,14 @@ public:
 
     return ret;
   }
-  std::vector<AST *> parseArguments() {
+  std::vector<AST *> parseArguments(Scope *scope) {
     std::vector<AST *> ret;
 
     // std::cout << std::endl;
 
     while (this->currentToken->type != TOKEN_RPAREN) {
       // printToken(this->currentToken);
-      AST *param = this->parseArg();
+      AST *param = this->parseArg(scope);
       ret.push_back(param);
       if (this->currentToken->type != TOKEN_RPAREN)
         this->eat(TOKEN_COMMA);
@@ -187,7 +188,7 @@ public:
 
     return ret;
   }
-  AST *parseArg() {
+  AST *parseArg(Scope *scope) {
     AST *ret = new AST(AST_ARGUMENT);
 
     if (this->currentToken->type == TOKEN_STRING) {
@@ -199,25 +200,25 @@ public:
       ret->value = this->currentToken->value;
       this->eat(TOKEN_ID);
     } else if (this->currentToken->type == TOKEN_INT) {
-      ret->body = this->parseExpression();
+      ret->body = this->parseExpression(scope);
       ret->type = AST_EXPRESSION;
     }
 
     return ret;
   }
-  AST *parseCompound() {
-    AST *parsed = this->parse(TOKEN_RBRACE);
+  AST *parseCompound(Scope *scope) {
+    AST *parsed = this->parse(scope, TOKEN_RBRACE);
 
     parsed->type = AST_COMPOUND;
 
     return parsed;
   }
-  AST *parseExpression() {
+  AST *parseExpression(Scope *scope) {
     AST *ret = new AST(AST_EXPRESSION);
 
-    AST *left = this->parsePrimaryExpression();
+    AST *left = this->parsePrimaryExpression(scope);
     if (isBinaryOperator(this->currentToken->type)) {
-      op_T operation = this->parseOperation();
+      op_T operation = this->parseOperation(scope);
       ret->left = left;
       ret->binOp = operation;
     } else if (left->type == AST_EXPRESSION_PRIMARY) {
@@ -226,7 +227,7 @@ public:
 
     return ret;
   }
-  AST *parsePrimaryExpression() {
+  AST *parsePrimaryExpression(Scope *scope) {
     AST *ret = new AST(AST_EXPRESSION_PRIMARY);
 
     ret->value = std::to_string(this->currentToken->intValue);
@@ -234,7 +235,7 @@ public:
 
     return ret;
   }
-  op_T parseOperation() {
+  op_T parseOperation(Scope *scope) {
     op_T ret;
 
     switch (this->currentToken->type) {
