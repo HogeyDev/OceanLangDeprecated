@@ -19,7 +19,8 @@ std::string oceanCompile(std::string path, int ismainfile = 0) {
   // printAST(root);
   AsmFrontend *asmFrontend = new AsmFrontend(root);
   // std::cout << "\nDONE COMPILING TO ASM...\n" << std::endl;
-  std::string compiled = asmFrontend->compileRootCompound(root, ismainfile);
+  std::string compiled =
+      asmFrontend->compileRootCompound(root, globalScope, ismainfile);
 
   // std::cout << compiled << std::endl;
 

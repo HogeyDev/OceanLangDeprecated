@@ -26,9 +26,8 @@ public:
     this->strings.push_back(row);
     return row[0];
   }
-  std::string compileRootCompound(AST *ast, int ismain = 0) {
+  std::string compileRootCompound(AST *ast, Scope *scope, int ismain = 0) {
     std::string ret;
-    Scope *scope = new Scope();
     // if (ismain) ret += "%define main _start\n";
 
     for (auto &child : ast->children) {
@@ -81,7 +80,7 @@ public:
     ret += ast->declarator->value + ":\n";
     if (ast->declarator->value != "main")
       ret += "push rbp\nmov rbp, rsp\n";
-    ret += this->compileRootCompound(ast->declarator->body) + "\n";
+    ret += this->compileRootCompound(ast->declarator->body, scope) + "\n";
     if (ast->declarator->value == "main") {
       ret += "mov rax, 60\nmov rdi, 0\nsyscall\n";
     } else {
