@@ -60,7 +60,7 @@ push QWORD [rsp+8]
 call exit
 add rsp, 8
 
-mov rax, 61
+mov rax, 60
 mov rdi, 0
 syscall
 
