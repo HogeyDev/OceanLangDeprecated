@@ -1,3 +1,4 @@
 build/
 test/*.asm
 test/*.o
+test/testFile
