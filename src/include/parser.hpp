@@ -60,6 +60,8 @@ public:
       }
     }
 
+    root->scope = scope;
+
     return root;
   }
   AST *parseId(Scope *scope) {
@@ -148,10 +150,17 @@ public:
         this->eat(TOKEN_STRING);
         this->eat(TOKEN_SEMICOLON);
 
+        scope->addNewVariable(ret->declType, ret->declarator->value);
+
       } else if (ret->declType == "int") {
         // parse expression
         ret->body = this->parseExpression(scope);
         this->eat(TOKEN_SEMICOLON);
+
+        std::cout << "I have an integer variable with a value of "
+                  << ret->body->value << std::endl;
+        scope->addNewVariable(ret->declType, ret->declarator->value,
+                              ret->body->value);
       }
     }
 

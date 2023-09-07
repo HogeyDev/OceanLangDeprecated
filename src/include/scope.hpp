@@ -14,6 +14,19 @@ public:
     // this->variables.emplace_back(type, name, value);
     this->strings.push_back(std::vector<std::string>{type, name, value});
   }
+  void addNewVariable(std::string type, std::string name) {
+    // this->variables.emplace_back(type, name, value);
+    this->strings.push_back(std::vector<std::string>{
+        type, name, "STR" + std::to_string(this->getNumStrings())});
+  }
+  int getNumStrings() {
+    int ret = 0;
+    for (auto &s : this->strings) {
+      if (s[0] == "str")
+        ret++;
+    }
+    return ret;
+  }
   void addNewVariable(std::string type, std::string name, int value) {
     // this->variables.emplace_back(type, name, std::to_string(value));
     this->ints.push_back(
@@ -36,4 +49,27 @@ public:
   int variableListLength() {
     return (this->strings.size() + this->ints.size());
   }
+  std::vector<std::vector<std::string>> getFullVariableList() {
+    std::vector<std::vector<std::string>> ret;
+    for (auto &s : this->strings) {
+      ret.push_back(s);
+    }
+    for (auto &i : this->ints) {
+      ret.push_back(i);
+    }
+    return ret;
+  }
+  void printVariableList() {
+    std::cout << "<";
+    for (auto &s : this->strings) {
+      std::cout << "<" << s[0] << ", " << s[1] << ", " << s[2] << ">";
+    }
+    std::cout << ">" << std::endl;
+    std::cout << "<";
+    for (auto &i : this->ints) {
+      std::cout << "<" << i[0] << ", " << i[1] << ", " << i[2] << ">";
+    }
+    std::cout << ">" << std::endl;
+  }
+  void printVariableList(std::vector<std::vector<std::string>> list) {}
 };

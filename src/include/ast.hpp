@@ -1,4 +1,5 @@
 #pragma once
+#include "scope.hpp"
 #include <string>
 #include <vector>
 
@@ -49,6 +50,8 @@ public:
   op_T binOp;
   std::vector<AST *> arguments;
   std::vector<AST *> children;
+
+  Scope *scope;
 
   AST(ast_T type) { this->type = type; }
 };

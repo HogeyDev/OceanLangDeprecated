@@ -14,15 +14,15 @@ public:
   std::vector<std::vector<std::string>> strings;
 
   AsmFrontend(AST *root) { this->root = root; }
-  std::string addNewString(std::string name) {
+  std::string addNewString(std::string value) {
     std::vector<std::string> row;
     for (auto &s : this->strings) {
-      if (s[1] != name)
+      if (s[1] != value)
         continue;
       return s[0];
     }
     row.push_back("STR" + std::to_string(this->strings.size()));
-    row.push_back(name);
+    row.push_back(value);
     this->strings.push_back(row);
     return row[0];
   }
@@ -64,14 +64,18 @@ public:
       std::string pushed = this->addNewString(ast->value);
       ret += "sub rsp, 8\n";
       ret += "mov QWORD [rsp+8], " + pushed + "\n";
-      scope->addNewVariable(ast->declType, ast->declarator->value, pushed);
+      std::cout << "My current value, sir: " << pushed << std::endl;
+      // scope->addNewVariable(ast->declType, ast->declarator->value, pushed);
     } else if (ast->declType == "int") {
       ret += "sub rsp, 8\n";
-      ret += "mov QWORD [rsp+8], " + ast->declarator->value + "\n";
+      ret += "mov QWORD [rsp+8], " + ast->body->value + "\n";
       std::cout << "NAME: " << ast->declarator->value
-                << " VALUE: " << ast->value << std::endl;
-      scope->addNewVariable(ast->declType, ast->declarator->value, ast->value);
+                << " VALUE: " << ast->body->value << std::endl;
+      // scope->addNewVariable(ast->declType, ast->declarator->value,
+      // ast->value);
     }
+    // std::cout << scope->getFullVariableList() << std::endl;
+    scope->printVariableList();
     return ret;
   }
   std::string compileDeclaration(AST *ast, Scope *scope) {
