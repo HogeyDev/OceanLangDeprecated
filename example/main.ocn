@@ -7,6 +7,6 @@ void main() {
     // printInt(myInt);
     print(myString);
 
-    // exit(10);
-    exit(myInt);
+    exit(10);
+    // exit(myInt);
 }
