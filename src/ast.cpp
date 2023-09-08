@@ -36,7 +36,7 @@ void printAST(AST *ast, std::string tabs, int finalReturn = 1) {
 void printAST(AST *ast) { printAST(ast, ""); }
 
 std::string getASTType(ast_T type) {
-  std::vector<std::string> names = {
+  const static std::string names[] = {
       "AST_ROOT",
       "AST_IMPORT",
       "AST_EXTERN",
