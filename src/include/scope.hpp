@@ -5,8 +5,6 @@
 #include <vector>
 
 class Scope {
-  // std::vector<std::vector<std::string>> strings;
-  // std::vector<std::vector<std::string>> ints;
   std::vector<std::vector<std::string>> variables;
 
 public:
