@@ -58,3 +58,11 @@ std::string getASTType(ast_T type) {
   };
   return names[type];
 }
+
+std::string getOPType(op_T op) {
+  const static std::string names[] = {
+      "OP_ADD", "OP_SUB",    "OP_DIV", "OP_MUL",  "OP_LT",
+      "OP_GT",  "OP_ASSIGN", "OP_CMP", "OP_LTET", "OP_GTET",
+  };
+  return names[op];
+}

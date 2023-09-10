@@ -64,18 +64,55 @@ public:
       std::string pushed = this->addNewString(ast->value);
       ret += "sub rsp, 8\n";
       ret += "mov QWORD [rsp+8], " + pushed + "\n";
-      // std::cout << "My current value, sir: " << pushed << std::endl;
-      // scope->addNewVariable(ast->declType, ast->declarator->value, pushed);
     } else if (ast->declType == "int") {
-      ret += "sub rsp, 8\n";
-      ret += "mov QWORD [rsp+8], " + ast->body->value + "\n";
-      // std::cout << "NAME: " << ast->declarator->value
-      //           << " VALUE: " << ast->body->value << std::endl;
-      // scope->addNewVariable(ast->declType, ast->declarator->value,
-      // ast->value);
+      ret += this->compileExpression(ast->body, scope);
     }
     // std::cout << scope->getFullVariableList() << std::endl;
     // scope->printVariableList();
+    return ret;
+  }
+  std::string compileBinaryOperation(op_T binOp) {
+    std::string ret;
+    switch (binOp) {
+    case OP_ADD:
+      ret = "add rax, rbx\n";
+      break;
+    case OP_SUB:
+      ret = "sub rax, rbx\n";
+      break;
+    case OP_MUL:
+      ret = "mul rbx\n";
+      break;
+    case OP_DIV:
+      ret = "div rbx\n";
+      break;
+    default: {
+      std::cout << "Unimplemented Binary Operation: " << getOPType(binOp)
+                << std::endl;
+      exit(1);
+    }
+    }
+    return ret;
+  }
+  std::string compileExpression(AST *ast, Scope *scope) {
+    std::string ret;
+
+    // std::cout << "MY EXPRESSION TYPE: " << getASTType(ast->type) <<
+    // std::endl;
+    if (ast->type == AST_EXPRESSION_PRIMARY) {
+      ret += "sub rsp, 8\n";
+      ret += "mov QWORD [rsp+8], " + ast->value + "\n";
+    } else if (ast->type == AST_EXPRESSION) {
+      ret += this->compileExpression(ast->left, scope);
+      ret += this->compileExpression(ast->right, scope);
+      ret += "mov rax, QWORD[rsp + 8]\nadd rsp, 8\nmov rbx, QWORD[rsp + "
+             "8]\nadd rsp,8\n";
+      ret += this->compileBinaryOperation(ast->binOp);
+      ret += "sub rsp, 8\nmov QWORD [rsp+8], rax\n";
+      // std::cout << ret << std::endl;
+    } else {
+      std::cout << "Unknown AST Type: " << getASTType(ast->type) << std::endl;
+    }
     return ret;
   }
   std::string compileDeclaration(AST *ast, Scope *scope) {

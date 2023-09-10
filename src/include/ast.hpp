@@ -59,3 +59,4 @@ public:
 void printAST(AST *ast, std::string tabs, int finalReturn);
 void printAST(AST *ast);
 std::string getASTType(ast_T type);
+std::string getOPType(op_T op);

@@ -230,10 +230,14 @@ public:
       op_T operation = this->parseOperation(scope);
       ret->left = left;
       ret->binOp = operation;
+      ret->right = this->parseExpression(scope);
     } else if (left->type == AST_EXPRESSION_PRIMARY) {
       ret = left;
     }
-    printAST();
+
+    // std::cout << "LEFT: " << ret->left << std::endl;
+    // std::cout << "BINOP: " << ret->binOp << std::endl;
+    // std::cout << "RIGHT: " << ret->right << std::endl;
 
     return ret;
   }
@@ -250,17 +254,22 @@ public:
 
     switch (this->currentToken->type) {
     case TOKEN_PLUS:
-      return OP_ADD;
+      ret = OP_ADD;
+      break;
     case TOKEN_MINUS:
-      return OP_SUB;
+      ret = OP_SUB;
+      break;
     case TOKEN_STAR:
-      return OP_MUL;
+      ret = OP_MUL;
+      break;
     case TOKEN_SLASH:
-      return OP_DIV;
+      ret = OP_DIV;
+      break;
     default:
       this->printError();
       exit(1);
     }
+
     this->eat(this->currentToken->type);
 
     return ret;
