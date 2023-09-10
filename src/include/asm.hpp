@@ -106,7 +106,7 @@ public:
       ret += this->compileExpression(ast->left, scope);
       ret += this->compileExpression(ast->right, scope);
       ret += "mov rax, QWORD[rsp + 8]\nadd rsp, 8\nmov rbx, QWORD[rsp + "
-             "8]\nadd rsp,8\n";
+             "8]\nadd rsp, 8\n";
       ret += this->compileBinaryOperation(ast->binOp);
       ret += "sub rsp, 8\nmov QWORD [rsp+8], rax\n";
       // std::cout << ret << std::endl;
