@@ -17,7 +17,7 @@ public:
     this->currentToken = this->lexer->nextToken();
   }
   void printLocation() {
-    std::cout << "\tLocation: " << this->lexer->line << ":"
+    std::cout << "\tLocation: " << (this->lexer->line + 1) << ":"
               << this->lexer->column << std::endl;
   }
   void printError() {
@@ -56,7 +56,7 @@ public:
         break;
       default:
         this->printError();
-        exit(0);
+        exit(1);
       }
     }
 
@@ -102,7 +102,7 @@ public:
 
     } else {
       this->printError();
-      exit(0);
+      exit(1);
     }
 
     return ret;
@@ -157,8 +157,8 @@ public:
         ret->body = this->parseExpression(scope);
         this->eat(TOKEN_SEMICOLON);
 
-        std::cout << "I have an integer variable with a value of "
-                  << ret->body->value << std::endl;
+        // std::cout << "I have an integer variable with a value of "
+        //           << ret->body->value << std::endl;
         scope->addNewVariable(ret->declType, ret->declarator->value,
                               ret->body->value);
       }
@@ -233,6 +233,7 @@ public:
     } else if (left->type == AST_EXPRESSION_PRIMARY) {
       ret = left;
     }
+    printAST();
 
     return ret;
   }
@@ -258,7 +259,7 @@ public:
       return OP_DIV;
     default:
       this->printError();
-      exit(0);
+      exit(1);
     }
     this->eat(this->currentToken->type);
 

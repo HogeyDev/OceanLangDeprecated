@@ -22,6 +22,7 @@ public:
   void printError() {
     std::cout << "[LEXER] Unrecognized Character: " << this->c << " ("
               << this->line << ":" << this->column << ")" << std::endl;
+    exit(1);
   }
 
   void advance() {
@@ -50,15 +51,15 @@ public:
     this->skipComments();
 
     if (isalpha(this->c)) {
-      return this->parseId();
+      return this->parseId(); // TOKEN_ID
     }
     if (isdigit(this->c)) {
-      return this->parseInt();
+      return this->parseInt(); // TOKEN_INT
     }
 
     switch (this->c) {
     case '"':
-      return this->parseString();
+      return this->parseString(); // TOKEN_STRING
     case '(':
       return this->advanceWith(TOKEN_LPAREN);
     case ')':
@@ -71,9 +72,19 @@ public:
       return this->advanceWith(TOKEN_SEMICOLON);
     case '=':
       return this->advanceWith(TOKEN_EQUALS);
+    case '+':
+      return this->advanceWith(TOKEN_PLUS);
+    case '-':
+      return this->advanceWith(TOKEN_MINUS);
+    case '*':
+      return this->advanceWith(TOKEN_STAR);
     case '/':
-      this->skipComments();
-      return this->nextToken();
+      return this->advanceWith(TOKEN_SLASH);
+    case ',':
+      return this->advanceWith(TOKEN_COMMA);
+    // case '/':
+    //   this->skipComments();
+    //   return this->nextToken();
     case '\0':
       return new Token(TOKEN_EOF);
     default: {

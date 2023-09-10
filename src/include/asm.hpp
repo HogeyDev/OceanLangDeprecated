@@ -64,18 +64,18 @@ public:
       std::string pushed = this->addNewString(ast->value);
       ret += "sub rsp, 8\n";
       ret += "mov QWORD [rsp+8], " + pushed + "\n";
-      std::cout << "My current value, sir: " << pushed << std::endl;
+      // std::cout << "My current value, sir: " << pushed << std::endl;
       // scope->addNewVariable(ast->declType, ast->declarator->value, pushed);
     } else if (ast->declType == "int") {
       ret += "sub rsp, 8\n";
       ret += "mov QWORD [rsp+8], " + ast->body->value + "\n";
-      std::cout << "NAME: " << ast->declarator->value
-                << " VALUE: " << ast->body->value << std::endl;
+      // std::cout << "NAME: " << ast->declarator->value
+      //           << " VALUE: " << ast->body->value << std::endl;
       // scope->addNewVariable(ast->declType, ast->declarator->value,
       // ast->value);
     }
     // std::cout << scope->getFullVariableList() << std::endl;
-    scope->printVariableList();
+    // scope->printVariableList();
     return ret;
   }
   std::string compileDeclaration(AST *ast, Scope *scope) {

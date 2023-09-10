@@ -3,7 +3,7 @@ import "example/stdlib.wv" // imports exiting
 
 void main() {
     str myString = "Hello, World!";
-    int myInt = 69;
+    int myInt = 27 + 15;
     // printInt(myInt);
     print(myString);
 
