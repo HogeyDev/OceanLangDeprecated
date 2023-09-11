@@ -86,7 +86,7 @@ public:
       this->eat(TOKEN_STRING);
       this->eat(TOKEN_SEMICOLON);
     } else if (this->currentToken->type == TOKEN_ID) {
-      // function call or assigning a variable
+      // function call or assigning a variable or recalling a variable
       ret->value = this->currentToken->value;
       this->eat(TOKEN_ID);
       if (this->currentToken->type == TOKEN_LPAREN) {
@@ -97,7 +97,9 @@ public:
         this->eat(TOKEN_RPAREN);
         this->eat(TOKEN_SEMICOLON);
       } else if (this->currentToken->type == TOKEN_EQUALS) {
-        // TODO: variable assignment
+        // TODO: variable reassignment
+      } else {
+        ret->type = AST_VARIABLE_RECALL;
       }
 
     } else {
@@ -225,7 +227,12 @@ public:
   AST *parseExpression(Scope *scope) {
     AST *ret = new AST(AST_EXPRESSION);
 
-    AST *left = this->parsePrimaryExpression(scope);
+    AST *left;
+    if (this->currentToken->type == TOKEN_ID) {
+      left = this->parseId(scope);
+    } else {
+      left = this->parsePrimaryExpression(scope);
+    }
     if (isBinaryOperator(this->currentToken->type)) {
       op_T operation = this->parseOperation(scope);
       ret->left = left;

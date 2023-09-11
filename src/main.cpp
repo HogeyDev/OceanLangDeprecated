@@ -1,4 +1,5 @@
 #include "asm.hpp"
+#include "config.hpp"
 #include "ocean.hpp"
 #include <cstdlib>
 #include <iostream>

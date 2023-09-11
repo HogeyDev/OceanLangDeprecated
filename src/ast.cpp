@@ -53,6 +53,7 @@ std::string getASTType(ast_T type) {
       "AST_PARAMETER",
       "AST_EXPRESSION",
       "AST_VARIABLE_ASSIGNMENT",
+      "AST_VARIABLE_RECALL",
       "AST_VARIABLE",
       "AST_EXPRESSION_PRIMARY",
   };

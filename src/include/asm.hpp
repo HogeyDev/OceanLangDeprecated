@@ -99,13 +99,22 @@ public:
 
     // std::cout << "MY EXPRESSION TYPE: " << getASTType(ast->type) <<
     // std::endl;
-    if (ast->type == AST_EXPRESSION_PRIMARY) {
+    std::cout << getASTType(ast->type) << std::endl;
+    if (ast->type == AST_VARIABLE_RECALL) {
+      ret += asmComment("Variable Recall in compileExpression");
+      ret += "mov rax, QWORD [rsp+" +
+             std::to_string(scope->getVariableOffset(ast->value)) + "]\n";
+      ret += "sub rsp, 8\n";
+      ret += "mov QWORD [rsp+8], rax\n";
+    } else if (ast->type == AST_EXPRESSION_PRIMARY) {
+      ret += asmComment("Primary Expession in compileExpression");
       ret += "sub rsp, 8\n";
       ret += "mov QWORD [rsp+8], " + ast->value + "\n";
     } else if (ast->type == AST_EXPRESSION) {
+      ret += asmComment("Expession in compileExpression");
       ret += this->compileExpression(ast->left, scope);
       ret += this->compileExpression(ast->right, scope);
-      ret += "mov rax, QWORD[rsp + 8]\nadd rsp, 8\nmov rbx, QWORD[rsp + "
+      ret += "mov rax, QWORD [rsp+8]\nadd rsp, 8\nmov rbx, QWORD[rsp + "
              "8]\nadd rsp, 8\n";
       ret += this->compileBinaryOperation(ast->binOp);
       ret += "sub rsp, 8\nmov QWORD [rsp+8], rax\n";
@@ -119,12 +128,16 @@ public:
     std::string ret;
     ret += "global " + ast->declarator->value + "\n";
     ret += ast->declarator->value + ":\n";
-    if (ast->declarator->value != "main")
+    if (ast->declarator->value != "main") {
+      ret += asmComment("Standard function header");
       ret += "push rbp\nmov rbp, rsp\n";
+    }
     ret += this->compileRootCompound(ast->declarator->body, scope) + "\n";
     if (ast->declarator->value == "main") {
+      ret += asmComment("Default exit code");
       ret += "mov rax, 60\nmov rdi, 0\nsyscall\n";
     } else {
+      ret += asmComment("Resetting stack");
       ret += "mov rsp, rbp\npop rbp\nret\n";
     }
     return ret;
@@ -141,12 +154,15 @@ public:
       } else if (a->type == AST_EXPRESSION) {
         // std::cout << "HELP" << std::endl;
         if (a->body->type == AST_EXPRESSION_PRIMARY) {
+          ret += asmComment("Parsing primary expression in function argument");
           ret += "mov QWORD [rsp+8], " + a->body->value + "\n";
           pushed = "QWORD [rsp+8]";
         }
       }
+      ret += asmComment("Pushing argument to stack");
       ret += "push " + pushed + "\n";
     }
+    ret += asmComment("Calling function");
     ret += "call " + ast->value + "\nadd rsp, 8";
     // + std::to_string(scope->variableListLength() * 8) + "\n";
     return ret;
@@ -164,6 +180,8 @@ public:
   }
   std::string generateDataSection() {
     std::string ret = "section .data\n";
+    ret +=
+        asmComment("Constants like strings and maybe const ints? not sure yet");
     for (auto &s : this->strings) {
       ret += s[0] + ": db " + s[1] + ", 0xa, 0\n";
     }

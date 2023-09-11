@@ -2,9 +2,8 @@ import "example/io.wv" // imports standard io
 import "example/stdlib.wv" // imports exiting
 
 void main() {
-    str myString = "Hello, World!";
-    int myInt = 27 + 15;
-    print(myString);
+    int x = 12;
+    int y = x * 4;
 
-    exit(myInt);
+    exit(y);
 }
