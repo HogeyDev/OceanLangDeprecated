@@ -62,9 +62,11 @@ public:
     std::string ret;
     if (ast->declType == "str") {
       std::string pushed = this->addNewString(ast->value);
+      ret += asmComment("Adding string variable to stack");
       ret += "sub rsp, 8\n";
       ret += "mov QWORD [rsp+8], " + pushed + "\n";
     } else if (ast->declType == "int") {
+      ret += asmComment("Adding int variable to stack");
       ret += this->compileExpression(ast->body, scope);
     }
     // std::cout << scope->getFullVariableList() << std::endl;
@@ -73,18 +75,19 @@ public:
   }
   std::string compileBinaryOperation(op_T binOp) {
     std::string ret;
+    ret += asmComment("Executing binary operation");
     switch (binOp) {
     case OP_ADD:
-      ret = "add rax, rbx\n";
+      ret += "add rax, rbx\n";
       break;
     case OP_SUB:
-      ret = "sub rax, rbx\n";
+      ret += "sub rax, rbx\n";
       break;
     case OP_MUL:
-      ret = "mul rbx\n";
+      ret += "mul rbx\n";
       break;
     case OP_DIV:
-      ret = "div rbx\n";
+      ret += "div rbx\n";
       break;
     default: {
       std::cout << "Unimplemented Binary Operation: " << getOPType(binOp)
@@ -114,8 +117,8 @@ public:
       ret += asmComment("Expession in compileExpression");
       ret += this->compileExpression(ast->left, scope);
       ret += this->compileExpression(ast->right, scope);
-      ret += "mov rax, QWORD [rsp+8]\nadd rsp, 8\nmov rbx, QWORD[rsp + "
-             "8]\nadd rsp, 8\n";
+      ret += "mov rax, QWORD [rsp+8]\nadd rsp, 8\nmov rbx, QWORD [rsp+8]\nadd "
+             "rsp, 8\n";
       ret += this->compileBinaryOperation(ast->binOp);
       ret += "sub rsp, 8\nmov QWORD [rsp+8], rax\n";
       // std::cout << ret << std::endl;

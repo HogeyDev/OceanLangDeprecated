@@ -23,10 +23,10 @@ int isBinaryOperator(token_T tokenType) {
 
 std::string asmComment(const std::string &comment) {
 #ifdef ASM_COMMENTS
-  std::cout << "COMMENTING" << std::endl;
+  // std::cout << "COMMENTING" << std::endl;
   return ("; " + comment + "\n");
 #else
-  std::cout << "SKIPPING ASM COMMENT: " << comment << std::endl;
+  // std::cout << "SKIPPING ASM COMMENT: " << comment << std::endl;
   return "";
 #endif
 }

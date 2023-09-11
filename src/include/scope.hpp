@@ -43,9 +43,11 @@ public:
   }
   int getVariableOffset(std::string variableName) {
     int totLen = this->variableListLength();
-    for (unsigned int i = 0; i < this->variables.size(); i++) {
+    std::cout << "Variable list length: " << totLen << std::endl;
+    for (unsigned int i = 0; i < totLen; i++) {
+      std::cout << "Variable: " << this->variables[i][1] << std::endl;
       if (this->variables[i][1] == variableName)
-        return (totLen - i) * 8;
+        return (totLen - i - 1) * 8;
     }
     std::cout << "[SCOPE]: No Variable Called '" << variableName << "'"
               << std::endl;
